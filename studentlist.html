@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Check-In/Check-Out</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        button {
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:disabled {
+            background-color: #808080;
+            cursor: not-allowed;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4caf50;
+        }
+
+        button.export-btn {
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button.export-btn:hover {
+            background-color: #005F79;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Student Check-In/Check-Out</h2>
+
+<!-- Replace the names with your actual student names -->
+<button id="johnCheckIn" onclick="checkIn('Anoi')">Check In Anoi</button>
+<button id="johnCheckOut" onclick="checkOut('Anoi')">Check Out Anoi</button><br>
+
+<button id="janeCheckIn" onclick="checkIn('Jonah')">Check In Jonah</button>
+<button id="janeCheckOut" onclick="checkOut('Jonah')">Check Out Jonah</button><br>
+
+<button id="bobCheckIn" onclick="checkIn('Liam')">Check In Liam</button>
+<button id="bobCheckOut" onclick="checkOut('Liam')">Check Out Liam</button><br>
+
+<button id="aliceCheckIn" onclick="checkIn('Ezieql')">Check In Ezieql</button>
+<button id="aliceCheckOut" onclick="checkOut('Ezieql')">Check Out Ezieql</button><br>
+
+<button id="aliceCheckIn" onclick="checkIn('Daniel')">Check In Daniel</button>
+<button id="aliceCheckOut" onclick="checkOut('Daniel')">Check Out Daniel</button><br>
+
+<button class="export-btn" onclick="exportToExcel()">Export to Excel</button>
+
+<script>
+    let data = [];
+
+    function checkIn(studentName) {
+        const parentName = prompt('Enter parent\'s name:');
+        if (parentName) {
+            alert(studentName + " checked in. Parent: " + parentName);
+            updateData(studentName, 'Check In', parentName);
+            updateButtonState(studentName);
+        }
+    }
+
+    function checkOut(studentName) {
+        const parentName = prompt('Enter parent\'s name:');
+        if (parentName) {
+            alert(studentName + " checked out. Parent: " + parentName);
+            updateData(studentName, 'Check Out', parentName);
+            updateButtonState(studentName);
+        }
+    }
+
+    function updateData(studentName, action, parentName) {
+        data.push({
+            'Name': studentName,
+            'Action': action,
+            'ParentName': parentName,
+            'Timestamp': new Date().toLocaleString()
+        });
+    }
+
+    function updateButtonState(studentName) {
+        document.getElementById(studentName.toLowerCase() + "CheckIn").disabled = true;
+        document.getElementById(studentName.toLowerCase() + "CheckOut").disabled = false;
+    }
+
+    function exportToExcel() {
+        const ws = XLSX.utils.json_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Student_Data');
+        XLSX.writeFile(wb, 'student_data.xlsx');
+    }
+</script>
+
+</body>
+</html>
